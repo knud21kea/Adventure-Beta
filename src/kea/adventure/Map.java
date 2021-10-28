@@ -24,17 +24,15 @@ import java.util.Random;
 public class Map {
 
     private Room courtyard, chancellery, ballroom, banquet, catacombs, apartment, hall, casements, chapel;
-    private ArrayList<Room> rooms = new ArrayList<>();
-    private ArrayList<Item> startInventory = new ArrayList<>();
-    private ArrayList<Food> foods = new ArrayList<>();
-    private ArrayList<Weapon> weapons = new ArrayList<>();
-    private Random rand = new Random();
+    private final ArrayList<Room> rooms = new ArrayList<>();
+    private final ArrayList<Item> startInventory = new ArrayList<>();
+    private final Random rand = new Random();
 
     // Create all instances of Item class
     // Some names have duplicates to test the parser - key, gold, silver etc.
 
     Item brassLamp = new Item("A brass lamp", 15);
-    Item smallKnife = new Item("A small knife", 5);
+    Item diamondRing = new Item("A diamond ring", 5);
     Item emptyBottle = new Item("An empty bottle", 5);
     Item silverKey = new Item("A silver key", 1);
     Item silverCoin = new Item("A silver coin", 1);
@@ -50,13 +48,15 @@ public class Map {
     Food aPoisonApple = new Food("A red apple", 5, -10);
     Food aPear = new Food("A ripe pear", 5, 5);
 
-    Weapon knife = new meleeWeapon("A blunt knife", 5, 1, 0);
-    Weapon sword = new meleeWeapon("A sword", 10, 15, 0);
-    Weapon axe = new meleeWeapon("An axe", 15, 25, 0);
-    Weapon bow = new shootingWeapon("A bow", 5, 20, 3);
+    Weapon knife = new MeleeWeapon("A blunt knife", 5, 1, 1);
+    Weapon dagger = new MeleeWeapon("A sharp dagger", 5, 5, 1);
+    Weapon sword = new MeleeWeapon("A sword", 10, 15, 1);
+    Weapon axe = new MeleeWeapon("An axe", 15, 25, 1);
+    Weapon bow = new ShootingWeapon("A bow", 5, 10, 3);
 
     Enemy orc = new Enemy("An ugly orc", 50, axe);
     Enemy elf = new Enemy("A dark elf", 60, bow);
+    Enemy goblin = new Enemy("A small goblin", 40, dagger);
 
     public Map() {
     }
@@ -77,10 +77,6 @@ public class Map {
 
         List<Room> roomList = Arrays.asList(courtyard, chancellery, ballroom, banquet, catacombs, apartment, hall, casements, chapel);
         rooms.addAll(roomList);
-        List<Food> foodList = Arrays.asList(anApple, aPoisonApple, aPear);
-        foods.addAll(foodList);
-        List<Weapon> weaponList = Arrays.asList(knife, sword, axe, bow);
-        weapons.addAll(weaponList);
 
         // Make connections - auto 2 way
 
@@ -99,7 +95,7 @@ public class Map {
 
         // Place items in rooms
         chancellery.addItemToRoom(brassLamp);
-        ballroom.addItemToRoom(smallKnife);
+        ballroom.addItemToRoom(diamondRing);
         ballroom.addItemToRoom(emptyBottle);
         banquet.addItemToRoom(aPoisonApple);
         courtyard.addItemToRoom(anApple);
@@ -113,6 +109,7 @@ public class Map {
         courtyard.addItemToRoom(sword);
         chancellery.putEnemyInRoom(orc);
         casements.putEnemyInRoom(elf);
+        chapel.putEnemyInRoom(goblin);
 
         // Items the player has to start with
 
@@ -149,11 +146,21 @@ public class Map {
     }
 
     public boolean isWeapon(Item item) {
-        return (weapons.contains(item));
+        return (item instanceof Weapon);
     }
 
     public boolean isFood(Item item) {
-        return (foods.contains(item));
+        return (item instanceof Food);
+    }
+
+    public boolean checkForHolyWater() {
+        ArrayList<Item> objects = getSpecialRoom().getRoomItems();
+        return (objects.contains(holyWater));
+    }
+
+    public boolean checkForGoldBar() {
+        ArrayList<Item> objects = getSpecialRoom().getRoomItems();
+        return (objects.contains(goldBar));
     }
 }
 

@@ -9,8 +9,8 @@ public class Room {
     private final String roomName, roomDescription;
     private Room north, east, west, south;
     private boolean knownNorth, knownEast, knownSouth, knownWest;
-    private ArrayList<Item> items = new ArrayList<>(); // List of Item objects that are in the room
-    private ArrayList<Enemy> enemies = new ArrayList<>(); // List of Enemy objects that are in the room
+    private final ArrayList<Item> items = new ArrayList<>(); // List of Item objects that are in the room
+    private final ArrayList<Enemy> enemies = new ArrayList<>(); // List of Enemy objects that are in the room
 
     public Room(String roomName, String roomDescription) {
         this.roomName = roomName;
@@ -29,8 +29,32 @@ public class Room {
         return this.items;
     }
 
+    public String getItemName(int item) {
+        return this.items.get(item).itemName;
+    }
+
+    public int getNumberOfRoomObjects() {
+        return this.items.size();
+    }
+
     public ArrayList<Enemy> getRoomEnemies() {
         return this.enemies;
+    }
+
+    public int getNumberOfEnemies() {
+        return this.enemies.size();
+    }
+
+    public String getEnemyName() {
+        return this.enemies.get(0).getEnemyName();
+    }
+
+    public int getEnemyHealth() {
+        return this.enemies.get(0).getEnemyHealth();
+    }
+
+    public String getEnemyWeaponName() {
+        return this.enemies.get(0).getWeaponName();
     }
 
     // Add item to room
@@ -47,8 +71,16 @@ public class Room {
         this.enemies.add(enemy);
     }
 
-    public void removeEnemyFromRoom(Enemy enemy) {
-        this.enemies.remove(enemy);
+    public void removeEnemyFromRoom() {
+        this.enemies.clear();
+    }
+
+    public void dropEnemyWeapon() {
+        addItemToRoom(enemies.get(0).getEnemyWeapon());
+    }
+
+    public int getEnemyDamage() {
+        return enemies.get(0).getWeaponDamage();
     }
 
     // connect two rooms South to North
@@ -65,44 +97,42 @@ public class Room {
         east.west = this;
     }
 
-    // 4 methods to find a room in the given direction and note that the player has now tried to go there
+    // Find a room in the given direction and note that the player has now tried to go there
 
-    public Room getNorthRoom() {
-        this.knownNorth = true;
-        return north;
+    public Room getRoom(String direction) {
+        Room room = null;
+        switch (direction) {
+            case "North" -> {
+                this.knownNorth = true;
+                room = north;
+            }
+            case "East" -> {
+                this.knownEast = true;
+                room = east;
+            }
+            case "South" -> {
+                this.knownSouth = true;
+                room = south;
+            }
+            case "West" -> {
+                this.knownWest = true;
+                room = west;
+            }
+        }
+        return room;
     }
 
-    public Room getEastRoom() {
-        this.knownEast = true;
-        return east;
-    }
+    // Check if the player has previously tried to go the given direction
 
-    public Room getSouthRoom() {
-        this.knownSouth = true;
-        return south;
-    }
-
-    public Room getWestRoom() {
-        this.knownWest = true;
-        return west;
-    }
-
-    // 4 methods to check if the player has previously tried to go the given direction
-
-    public boolean getKnownNorth() {
-        return knownNorth;
-    }
-
-    public boolean getKnownEast() {
-        return knownEast;
-    }
-
-    public boolean getKnownSouth() {
-        return knownSouth;
-    }
-
-    public boolean getKnownWest() {
-        return knownWest;
+    public boolean getKnown(String direction) {
+        boolean isKnown = false;
+        switch (direction) {
+            case "North" -> isKnown = knownNorth;
+            case "East" -> isKnown = knownEast;
+            case "South" -> isKnown = knownSouth;
+            case "West" -> isKnown = knownWest;
+        }
+        return isKnown;
     }
 
     @Override
