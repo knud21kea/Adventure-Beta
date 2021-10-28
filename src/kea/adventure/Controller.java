@@ -4,12 +4,12 @@ import java.util.ArrayList;
 
 public class Controller {
 
-    private final Parser parser;
+    private final UserInterface ui;
     private final Map map;
     private final Player player;
 
     public Controller() {
-        parser = new Parser(this);
+        ui = new UserInterface(this);
         map = new Map();
         map.buildMap();
         map.addStarterItems();
@@ -17,7 +17,7 @@ public class Controller {
     }
 
     public void start() {
-        parser.loopMenu();
+        ui.loopMenu();
     }
 
     public Health checkState() {

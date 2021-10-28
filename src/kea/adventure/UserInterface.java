@@ -3,7 +3,7 @@ package kea.adventure;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Parser {
+public class UserInterface {
 
     private final Scanner input = new Scanner(System.in);
     private final Controller controller;
@@ -11,7 +11,7 @@ public class Parser {
     private String menuOption;
     private boolean canMove;
 
-    public Parser(Controller controller) {
+    public UserInterface(Controller controller) {
         this.controller = controller;
     }
 
