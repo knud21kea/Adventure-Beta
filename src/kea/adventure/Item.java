@@ -20,9 +20,6 @@ public class Item {
 
     @Override
     public String toString() {
-        return "Item{" +
-                "itemName='" + itemName + '\'' +
-                ", itemWeight=" + itemWeight +
-                '}';
+        return itemName;
     }
 }

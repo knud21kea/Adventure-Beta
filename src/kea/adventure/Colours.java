@@ -1,6 +1,6 @@
 package kea.adventure;
 
-public enum Colours {
+enum Colours {
 
     RESET("\033[0m"),
     RED("\033[0;31m"),
@@ -9,7 +9,7 @@ public enum Colours {
     BLUE("\033[0;34m"),
     YELLOW_UNDERLINED("\033[4;33m");
 
-    private final String code;
+    String code;
 
     Colours(String code) {
         this.code = code;
