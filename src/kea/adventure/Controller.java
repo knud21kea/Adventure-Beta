@@ -1,11 +1,15 @@
 package kea.adventure;
 
+import kea.adventure.adventure.Item;
+import kea.adventure.adventure.Map;
+import kea.adventure.adventure.Weapon;
+
 import java.util.ArrayList;
 
 public class Controller {
 
     private final Parser parser;
-    private final Map map;
+    private final kea.adventure.adventure.Map map;
     private final Player player;
 
     public Controller() {
@@ -122,11 +126,11 @@ public class Controller {
     }
 
     public ArrayList<String> tryToTake(String itemNameToTry) {
-        Item foundItem = null;
-        ArrayList<Item> foundItems = tryToCommon(player.getCurrentRoom().getRoomItems(), itemNameToTry);
+        kea.adventure.adventure.Item foundItem = null;
+        ArrayList<kea.adventure.adventure.Item> foundItems = tryToCommon(player.getCurrentRoom().getRoomItems(), itemNameToTry);
         ArrayList<String> foundItemNames = new ArrayList<>();
         if (foundItems != null) {
-            for (Item item : foundItems) {
+            for (kea.adventure.adventure.Item item : foundItems) {
                 foundItem = item; // any valid item
                 foundItemNames.add(item.getItemName());
             }
@@ -143,21 +147,21 @@ public class Controller {
         return foundItemNames;
     }
 
-    public boolean checkCanTakeFoundItem(Item item) {
+    public boolean checkCanTakeFoundItem(kea.adventure.adventure.Item item) {
         return (item.getItemWeight() + player.getTotalWeight() <= player.getMaxWeight());
     }
 
-    public void moveItemFromRoomToPlayer(Item foundItem) {
+    public void moveItemFromRoomToPlayer(kea.adventure.adventure.Item foundItem) {
         player.takeAnItem(foundItem); // first and only match added to player
         player.getCurrentRoom().takeItemFromRoom(foundItem); // and removed from current room
     }
 
     public ArrayList<String> tryToDrop(String itemNameToTry) {
-        Item foundItem = null;
-        ArrayList<Item> foundItems = tryToCommon(player.getPlayerItems(), itemNameToTry);
+        kea.adventure.adventure.Item foundItem = null;
+        ArrayList<kea.adventure.adventure.Item> foundItems = tryToCommon(player.getPlayerItems(), itemNameToTry);
         ArrayList<String> foundItemNames = new ArrayList<>();
         if (foundItems != null) {
-            for (Item item : foundItems) {
+            for (kea.adventure.adventure.Item item : foundItems) {
                 foundItem = item; // any valid item
                 foundItemNames.add(item.getItemName());
             }
@@ -168,17 +172,17 @@ public class Controller {
         return foundItemNames;
     }
 
-    public void moveItemFromPlayerToRoom(Item foundItem) {
+    public void moveItemFromPlayerToRoom(kea.adventure.adventure.Item foundItem) {
         player.getCurrentRoom().addItemToRoom(foundItem); // first and only match added to current room
         player.dropAnItem(foundItem); // and removed from player
     }
 
     public ArrayList<String> tryToEat(String itemNameToTry) {
-        Item foundItem = null;
-        ArrayList<Item> foundItems = tryToCommon(player.getPlayerItems(), itemNameToTry);
+        kea.adventure.adventure.Item foundItem = null;
+        ArrayList<kea.adventure.adventure.Item> foundItems = tryToCommon(player.getPlayerItems(), itemNameToTry);
         ArrayList<String> foundItemNames = new ArrayList<>();
         if (foundItems != null) {
-            for (Item item : foundItems) {
+            for (kea.adventure.adventure.Item item : foundItems) {
                 foundItem = item; // any valid item
                 foundItemNames.add(item.getItemName());
             }
@@ -199,7 +203,7 @@ public class Controller {
         return foundItemNames;
     }
 
-    public boolean checkCanEatFoundItem(Item item) {
+    public boolean checkCanEatFoundItem(kea.adventure.adventure.Item item) {
         return map.isFood(item);
     }
 
@@ -210,18 +214,18 @@ public class Controller {
     }
 
     public ArrayList<String> tryToEquip(String itemNameToTry) {
-        Item foundItem = null;
-        ArrayList<Item> foundItems = tryToCommon(player.getPlayerItems(), itemNameToTry);
+        kea.adventure.adventure.Item foundItem = null;
+        ArrayList<kea.adventure.adventure.Item> foundItems = tryToCommon(player.getPlayerItems(), itemNameToTry);
         ArrayList<String> foundItemNames = new ArrayList<>();
         if (foundItems != null) {
-            for (Item item : foundItems) {
+            for (kea.adventure.adventure.Item item : foundItems) {
                 foundItem = item; // any valid item
                 foundItemNames.add(item.getItemName());
             }
             if (foundItems.size() == 1) {
                 boolean canEquip = checkCanEquipFoundItem(foundItem);
                 if (canEquip) {
-                    equipItem((Weapon) foundItem); // Cast to weapon
+                    equipItem((kea.adventure.adventure.Weapon) foundItem); // Cast to weapon
                 } else {
                     foundItemNames.add("Not weapon");
                     foundItemNames.remove(foundItem.getItemName());
@@ -231,7 +235,7 @@ public class Controller {
         return foundItemNames;
     }
 
-    public boolean checkCanEquipFoundItem(Item item) {
+    public boolean checkCanEquipFoundItem(kea.adventure.adventure.Item item) {
         return map.isWeapon(item);
     }
 
@@ -239,8 +243,8 @@ public class Controller {
         player.setEquippedWeapon(foundItem);
     }
 
-    public ArrayList<Item> tryToCommon(ArrayList<Item> givenInventory, String searchFor) {
-        ArrayList<Item> foundItems = new ArrayList<>();
+    public ArrayList<kea.adventure.adventure.Item> tryToCommon(ArrayList<kea.adventure.adventure.Item> givenInventory, String searchFor) {
+        ArrayList<kea.adventure.adventure.Item> foundItems = new ArrayList<>();
         for (Item item : givenInventory) {
             if (item.getItemName().toUpperCase().contains(searchFor)) {
                 foundItems.add(item);
