@@ -29,6 +29,14 @@ public class Room {
         return this.items;
     }
 
+    public ArrayList<String> getListOfRoomItemNames() {
+        ArrayList<String> itemNames = new ArrayList<>();
+        for (Item item : items) {
+            itemNames.add(item.getItemName());
+        }
+        return itemNames;
+    }
+
     public String getItemName(int item) {
         return this.items.get(item).itemName;
     }
@@ -39,6 +47,10 @@ public class Room {
 
     public ArrayList<Enemy> getRoomEnemies() {
         return this.enemies;
+    }
+
+    public boolean hasEnemies() {
+        return (enemies.size() > 0);
     }
 
     public int getNumberOfEnemies() {
@@ -99,9 +111,9 @@ public class Room {
 
     // Find a room in the given direction and note that the player has now tried to go there
 
-    public Room getRoom(String direction) {
+    public Room getRoom(Direction direction) {
         Room room = null;
-        switch (direction) {
+        switch (direction.name) {
             case "North" -> {
                 this.knownNorth = true;
                 room = north;
@@ -124,9 +136,9 @@ public class Room {
 
     // Check if the player has previously tried to go the given direction
 
-    public boolean getKnown(String direction) {
+    public boolean getKnown(Direction direction) {
         boolean isKnown = false;
-        switch (direction) {
+        switch (direction.name) {
             case "North" -> isKnown = knownNorth;
             case "East" -> isKnown = knownEast;
             case "South" -> isKnown = knownSouth;
@@ -137,8 +149,6 @@ public class Room {
 
     @Override
     public String toString() {
-        return roomName + "{" +
-                "items=" + items +
-                '}';
+        return roomName + ": " + roomDescription;
     }
 }

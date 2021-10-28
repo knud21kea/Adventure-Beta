@@ -10,26 +10,21 @@ public class Player {
 
     private Room currentRoom;
     private Room requestedRoom;
-    private final ArrayList<Item> ordinaryItemsPlayer; // Player inventory
+    private final ArrayList<Item> itemsPlayer; // Player inventory
 
     private int strengthPoints = 100;
     private Weapon equippedWeapon;
 
     public Player(Map map, Room start, Weapon weapon) {
         this.currentRoom = start; //map.getStarterRoom();
-        this.ordinaryItemsPlayer = map.getInitialInventory();
+        this.itemsPlayer = map.getInitialInventory();
         this.equippedWeapon = weapon;
     }
 
     // Player moves in the given direction or finds the way blocked
 
-    public boolean changeRoom(String direction) {
-        switch (direction) {
-            case "N" -> requestedRoom = this.currentRoom.getRoom("North");
-            case "E" -> requestedRoom = this.currentRoom.getRoom("East");
-            case "S" -> requestedRoom = this.currentRoom.getRoom("South");
-            case "W" -> requestedRoom = this.currentRoom.getRoom("West");
-        }
+    public boolean changeRoom(Direction direction) {
+        requestedRoom = this.currentRoom.getRoom(direction);
         if (requestedRoom != null) {
             this.currentRoom = requestedRoom; // move to new room
             return true;
@@ -44,19 +39,19 @@ public class Player {
     // Player inventory list
 
     public ArrayList<Item> getPlayerItems() {
-        return this.ordinaryItemsPlayer;
+        return this.itemsPlayer;
     }
 
     // remove an item from inventory
 
     public void dropAnItem(Item itemDropped) {
-        this.ordinaryItemsPlayer.remove(itemDropped);
+        this.itemsPlayer.remove(itemDropped);
     }
 
     // add an item to inventory
 
     public void takeAnItem(Item itemTaken) {
-        this.ordinaryItemsPlayer.add(itemTaken);
+        this.itemsPlayer.add(itemTaken);
     }
 
     public int getStrengthPoints() {
@@ -107,10 +102,10 @@ public class Player {
 
     public void setEquippedWeapon(Weapon weapon) {
         if (this.equippedWeapon != null) {
-            this.ordinaryItemsPlayer.add(equippedWeapon);
+            this.itemsPlayer.add(equippedWeapon);
         }
         this.equippedWeapon = weapon;
-        this.ordinaryItemsPlayer.remove(weapon);
+        this.itemsPlayer.remove(weapon);
     }
 
     // Actions use strength points, resting gains strength points
@@ -139,11 +134,43 @@ public class Player {
     }
 
     public int numberOfObjects() {
-        return ordinaryItemsPlayer.size();
+        return itemsPlayer.size();
     }
 
     public String getItemName(int item) {
-        return ordinaryItemsPlayer.get(item).itemName;
+        return itemsPlayer.get(item).itemName;
+    }
+
+    public String getEquippedWeaponName() {
+        return equippedWeapon.getItemName();
+    }
+
+    public int getEquippedWeaponDamage() {
+        return equippedWeapon.getDamage();
+    }
+
+    public int getEquippedWeaponAmmo() {
+        return equippedWeapon.getAmmo();
+    }
+
+    public boolean getEquippedWeaponCheckIfMelee() {
+        return equippedWeapon.checkIfMelee();
+    }
+
+    public ArrayList<String> getListOfItemNames() {
+        ArrayList<String> itemNames = new ArrayList<>();
+        for (Item item : itemsPlayer) {
+            itemNames.add(item.getItemName());
+        }
+        return itemNames;
+    }
+
+    public ArrayList<String> getListOfRoomItemNames() {
+        return currentRoom.getListOfRoomItemNames();
+    }
+
+    public boolean getCurrentRoomHasEnemies() {
+        return currentRoom.hasEnemies();
     }
 }
 

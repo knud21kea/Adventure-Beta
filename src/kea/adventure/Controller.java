@@ -41,19 +41,19 @@ public class Controller {
     }
 
     public String getWeaponName() {
-        return player.getEquippedWeapon().getItemName();
+        return player.getEquippedWeaponName();
     }
 
     public int getWeaponDamage() {
-        return player.getEquippedWeapon().getDamage();
+        return player.getEquippedWeaponDamage();
     }
 
     public int getWeaponAmmo() {
-        return player.getEquippedWeapon().getAmmo();
+        return player.getEquippedWeaponAmmo();
     }
 
     public boolean checkIfMelee() {
-        return player.getEquippedWeapon().checkIfMelee();
+        return player.getEquippedWeaponCheckIfMelee();
     }
 
     public int getNumberOfPlayerObjects() {
@@ -64,8 +64,8 @@ public class Controller {
         return player.getCurrentRoom().getNumberOfRoomObjects();
     }
 
-    public int getNumberOfEnemies() {
-        return player.getCurrentRoom().getNumberOfEnemies();
+    public boolean isThereAnEnemy() {
+        return player.getCurrentRoomHasEnemies();
     }
 
     public String getEnemyName() {
@@ -92,7 +92,7 @@ public class Controller {
         return player.getCurrentRoom().getItemName(item);
     }
 
-    public boolean changeRoom(String direction) {
+    public boolean changeRoom(Direction direction) {
         updateStrengthPoints(-3);
         return player.changeRoom(direction);
     }
@@ -101,7 +101,7 @@ public class Controller {
         return (player.getCurrentRoom() == map.getSpecialRoom());
     }
 
-    public boolean directionKnownBlocked(String direction) {
+    public boolean directionKnownBlocked(Direction direction) {
         return (player.getCurrentRoom().getKnown(direction) && player.getCurrentRoom().getRoom(direction) == null);
     }
 
@@ -288,5 +288,17 @@ public class Controller {
             player.updateStrengthPoints(-damage);
             return "You took " + damage + " damage from the " + enemyName.substring(firstSpace + 1) + " :(";
         }
+    }
+
+    public String getCurrentRoomName() {
+        return null;
+    }
+
+    public ArrayList<String> getListOfPlayerItemNames() {
+        return player.getListOfItemNames();
+    }
+
+    public ArrayList<String> getListOfRoomItemNames() {
+        return player.getListOfRoomItemNames();
     }
 }

@@ -30,7 +30,7 @@ public class UserInterface {
             if (!menuOption.equals("DEAD")) {
                 outputBasicDescription();
                 canMove = true; //used to only print blocked if user tries a blocked route
-                System.out.print("What do you want to do? ");
+                System.out.print("\nWhat do you want to do? ");
                 menuOption = input.nextLine().toUpperCase();
 
                 // Player choice with multiple command forms - had to drop the case switch
@@ -72,13 +72,13 @@ public class UserInterface {
                 } else if (menuOption.equals("GO") || menuOption.equals("G")) {
                     canMove = goSomewhere();
                 } else if (menuOption.equals("GO NORTH") || menuOption.equals("NORTH") || menuOption.equals("N") || menuOption.equals("GO N")) {
-                    canMove = controller.changeRoom("N");
+                    canMove = controller.changeRoom(Direction.NORTH);
                 } else if (menuOption.equals("GO EAST") || menuOption.equals("EAST") || menuOption.equals("E") || menuOption.equals("GO E")) {
-                    canMove = controller.changeRoom("E");
+                    canMove = controller.changeRoom(Direction.EAST);
                 } else if (menuOption.equals("GO SOUTH") || menuOption.equals("SOUTH") || menuOption.equals("S") || menuOption.equals("GO S")) {
-                    canMove = controller.changeRoom("S");
+                    canMove = controller.changeRoom(Direction.SOUTH);
                 } else if (menuOption.equals("GO WEST") || menuOption.equals("WEST") || menuOption.equals("W") || menuOption.equals("GO W")) {
-                    canMove = controller.changeRoom("W");
+                    canMove = controller.changeRoom(Direction.WEST);
                 } else {
                     unknownCommand(menuOption);
                 }
@@ -118,8 +118,7 @@ public class UserInterface {
 
     private void outputBasicDescription() {
         System.out.print("\nStrength " + controller.getStrength() + "% ");
-        System.out.print(":You are in " + controller.getCurrentRoom().getRoomName() + ": ");
-        System.out.println(controller.getCurrentRoom().getRoomDescription());
+        System.out.print(":You are in " + controller.getCurrentRoom());
     }
 
     public void outputInventory() {
@@ -134,21 +133,24 @@ public class UserInterface {
             }
             System.out.print(".");
         }
-        int objects = controller.getNumberOfPlayerObjects();
+        ArrayList<String> playerInventory = controller.getListOfPlayerItemNames();
+        int objects = playerInventory.size();
         int weight = controller.getWeightOfPlayerObjects();
         System.out.print("\nYou are carrying ");
         if (objects == 0) {
-            System.out.println("no items of total weight " + weight + " including any equipped weapons.");
+            System.out.print("no items of total weight " + weight + " including any equipped weapons");
         } else if (objects == 1) {
-            System.out.println("1 item of total weight " + weight + " including any equipped weapons:\n" + controller.getPlayerItemName(0) + ".");
+            System.out.print("1 item of total weight " + weight + " including any equipped weapons:\n" + playerInventory.get(0));
         } else {
-            System.out.print(objects + " items of total weight " + weight + " including any equipped weapons:\n" + controller.getPlayerItemName(0));
-            for (int i = 1; i < objects - 1; i++) {
-                System.out.print(", " + makeFirstLetterLowerCase(controller.getPlayerItemName(i)));
+            System.out.print(objects + " items of total weight " + weight + " including any equipped weapons:\n" + playerInventory.get(0));
+            for (int i = 1; i < objects; i++) {
+                if (i != objects - 1) {
+                    System.out.print(", ");
+                } else System.out.print(" and ");
+                System.out.print(makeFirstLetterLowerCase(playerInventory.get(i)));
             }
-            System.out.println(" and " + makeFirstLetterLowerCase(controller.getPlayerItemName(objects - 1)) + ".");
         }
-        System.out.print(Colours.RESET);
+        System.out.println("." + Colours.RESET);
     }
 
     private String makeFirstLetterLowerCase(String itemName) {
@@ -162,13 +164,13 @@ public class UserInterface {
         System.out.print("Hmmm. Which direction do you want to go? ");
         String direction = input.nextLine().toUpperCase();
         if (direction.startsWith("N")) {
-            canMove = controller.changeRoom("N");
+            canMove = controller.changeRoom(Direction.NORTH);
         } else if (direction.startsWith("E")) {
-            canMove = controller.changeRoom("E");
+            canMove = controller.changeRoom(Direction.EAST);
         } else if (direction.startsWith("S")) {
-            canMove = controller.changeRoom("S");
+            canMove = controller.changeRoom(Direction.SOUTH);
         } else if (direction.startsWith("W")) {
-            canMove = controller.changeRoom("W");
+            canMove = controller.changeRoom(Direction.WEST);
         }
         return canMove;
     }
@@ -177,9 +179,8 @@ public class UserInterface {
         controller.updateStrengthPoints(-1);
         if (!controller.CurrentIsSpecial()) {
             System.out.println("\nLooking around.");
-            String[] directions = {"North", "East", "South", "West"};
-            for (int i = 0; i < 4; i++) {
-                String direction = directions[i];
+
+            for (Direction direction : Direction.values()) {
                 if (controller.directionKnownBlocked(direction)) {
                     System.out.println(Colours.BLUE + "The way " + direction + " is blocked." + Colours.RESET);
                 }
@@ -199,21 +200,25 @@ public class UserInterface {
 
     public void outputDescription() {
         System.out.print(Colours.BLUE);
-        int objects = controller.getNumberOfRoomObjects();
+        ArrayList<String> roomInventory = controller.getListOfRoomItemNames();
+        int objects = roomInventory.size();
         System.out.print("You can see ");
         if (objects == 0) {
-            System.out.println("no items.");
+            System.out.print("no items");
         } else if (objects == 1) {
-            System.out.println("1 item:\n" + controller.getRoomItemName(0) + ".");
+            System.out.print("1 item:\n" + roomInventory.get(0));
         } else {
-            System.out.print(objects + " items:\n" + controller.getRoomItemName(0));
-            for (int i = 1; i < objects - 1; i++) {
-                System.out.print(", " + makeFirstLetterLowerCase(controller.getRoomItemName(i)));
+            System.out.print(objects + " items:\n" + roomInventory.get(0));
+            for (int i = 1; i < objects; i++) {
+                if (i != objects - 1) {
+                    System.out.print(", ");
+                } else System.out.print(" and ");
+                System.out.print(makeFirstLetterLowerCase(roomInventory.get(i)));
             }
-            System.out.println(" and " + makeFirstLetterLowerCase(controller.getRoomItemName(objects - 1)) + ".");
         }
-        int enemies = controller.getNumberOfEnemies();
-        if (enemies > 0) {
+        System.out.println(".");
+        boolean enemies = controller.isThereAnEnemy();
+        if (enemies) {
             System.out.print("There is an enemy here, " + makeFirstLetterLowerCase(controller.getEnemyName()));
             System.out.print(", with " + makeFirstLetterLowerCase(controller.getEnemyWeaponName()));
             System.out.println(", and health " + controller.getEnemyHealth() + ".");
