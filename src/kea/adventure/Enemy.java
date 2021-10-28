@@ -2,8 +2,8 @@ package kea.adventure;
 
 public class Enemy {
 
-    private Weapon enemyWeapon;
-    private String enemyName;
+    private final Weapon enemyWeapon;
+    private final String enemyName;
     private int health;
 
     public Enemy(String enemyName, int health, Weapon weapon) {

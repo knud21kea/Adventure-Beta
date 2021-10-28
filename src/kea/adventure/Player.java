@@ -4,19 +4,20 @@ package kea.adventure;
 
 import java.util.ArrayList;
 
+import static kea.adventure.Health.*;
+
 public class Player {
 
-    private Room getCurrentRoom;
+    private Room currentRoom;
     private Room requestedRoom;
-    private ArrayList itemsPlayer; // Player inventory
+    private final ArrayList<Item> ordinaryItemsPlayer; // Player inventory
 
-    private final int maxWeight = 25;
     private int strengthPoints = 100;
     private Weapon equippedWeapon;
 
     public Player(Map map, Room start, Weapon weapon) {
-        this.getCurrentRoom = start; //map.getStarterRoom();
-        this.itemsPlayer = map.getInitialInventory();
+        this.currentRoom = start; //map.getStarterRoom();
+        this.ordinaryItemsPlayer = map.getInitialInventory();
         this.equippedWeapon = weapon;
     }
 
@@ -24,38 +25,38 @@ public class Player {
 
     public boolean changeRoom(String direction) {
         switch (direction) {
-            case "N" -> requestedRoom = this.getCurrentRoom.getNorthRoom();
-            case "E" -> requestedRoom = this.getCurrentRoom.getEastRoom();
-            case "S" -> requestedRoom = this.getCurrentRoom.getSouthRoom();
-            case "W" -> requestedRoom = this.getCurrentRoom.getWestRoom();
+            case "N" -> requestedRoom = this.currentRoom.getRoom("North");
+            case "E" -> requestedRoom = this.currentRoom.getRoom("East");
+            case "S" -> requestedRoom = this.currentRoom.getRoom("South");
+            case "W" -> requestedRoom = this.currentRoom.getRoom("West");
         }
         if (requestedRoom != null) {
-            this.getCurrentRoom = requestedRoom; // move to new room
+            this.currentRoom = requestedRoom; // move to new room
             return true;
         }
         return false;
     }
 
     public Room getCurrentRoom() {
-        return this.getCurrentRoom;
+        return this.currentRoom;
     }
 
     // Player inventory list
 
-    public ArrayList getPlayerItems() {
-        return this.itemsPlayer;
+    public ArrayList<Item> getPlayerItems() {
+        return this.ordinaryItemsPlayer;
     }
 
     // remove an item from inventory
 
     public void dropAnItem(Item itemDropped) {
-        this.itemsPlayer.remove(itemDropped);
+        this.ordinaryItemsPlayer.remove(itemDropped);
     }
 
     // add an item to inventory
 
     public void takeAnItem(Item itemTaken) {
-        this.itemsPlayer.add(itemTaken);
+        this.ordinaryItemsPlayer.add(itemTaken);
     }
 
     public int getStrengthPoints() {
@@ -66,8 +67,38 @@ public class Player {
         this.strengthPoints = strengthPoints;
     }
 
+    public Health checkStrength() {
+        if (strengthPoints < 1) {
+            return DEAD;
+        } else if (strengthPoints < 20) {
+            return EXHAUSTED;
+        } else if (strengthPoints < 40) {
+            return TIRED;
+        } else if (strengthPoints < 70) {
+            return WEARY;
+        } else if (strengthPoints < 100) {
+            return FRESH;
+        } else {
+            return RESTED;
+        }
+    }
+
     public int getMaxWeight() {
-        return this.maxWeight;
+        return 25;
+    }
+
+    // return total weight of inventory including equipped weapon.
+
+    public int getTotalWeight() {
+        ArrayList<Item> objects = getPlayerItems();
+        int weight = 0;
+        for (Item object : objects) {
+            weight += (object.getItemWeight());
+        }
+        if (getEquippedWeapon() != null) {
+            weight += getEquippedWeapon().itemWeight;
+        }
+        return weight;
     }
 
     public Weapon getEquippedWeapon() {
@@ -76,10 +107,43 @@ public class Player {
 
     public void setEquippedWeapon(Weapon weapon) {
         if (this.equippedWeapon != null) {
-            this.itemsPlayer.add(equippedWeapon);
+            this.ordinaryItemsPlayer.add(equippedWeapon);
         }
         this.equippedWeapon = weapon;
-        this.itemsPlayer.remove(weapon);
+        this.ordinaryItemsPlayer.remove(weapon);
+    }
+
+    // Actions use strength points, resting gains strength points
+
+    public void updateStrengthPoints(int update) {
+        int strength = getStrengthPoints();
+        strength += update;
+        if (strength > 100) {
+            strength = 100;
+        } else if (strength < 1) {
+            strength = 0;
+        }
+        setStrengthPoints(strength);
+    }
+
+    public boolean weaponIsEquipped() {
+        return (equippedWeapon != null);
+    }
+
+    public boolean equippedWeaponIsUsable() {
+        return (equippedWeapon.getAmmo() > 0);
+    }
+
+    public void useEquippedWeapon() {
+        equippedWeapon.shootWeapon();
+    }
+
+    public int numberOfObjects() {
+        return ordinaryItemsPlayer.size();
+    }
+
+    public String getItemName(int item) {
+        return ordinaryItemsPlayer.get(item).itemName;
     }
 }
 

@@ -1,8 +1,8 @@
 package kea.adventure;
 
-public class meleeWeapon extends Weapon {
+public class MeleeWeapon extends Weapon {
 
-    public meleeWeapon(String itemName, int itemWeight, int damage, int ammo) {
+    public MeleeWeapon(String itemName, int itemWeight, int damage, int ammo) {
         super(itemName, itemWeight, damage, ammo);
     }
 
@@ -15,3 +15,4 @@ public class meleeWeapon extends Weapon {
     public void shootWeapon() {
     }
 }
+
