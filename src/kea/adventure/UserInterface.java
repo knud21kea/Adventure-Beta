@@ -43,7 +43,7 @@ public class UserInterface {
                 } else if (menuOption.equals("CHEAT") || menuOption.equals("C") || menuOption.equals("SPOILER")) {
                     info.showSpoiler();
                     controller.updateStrengthPoints(-10);
-                } else if (menuOption.equals("BACKGROUN") || menuOption.equals("B") || menuOption.equals("README")) {
+                } else if (menuOption.equals("BACKGROUND") || menuOption.equals("B") || menuOption.equals("README")) {
                     info.showReadme();
                 } else if (menuOption.equals("REST") || menuOption.equals("R") || menuOption.equals("SLEEP")) {
                     controller.updateStrengthPoints(20);

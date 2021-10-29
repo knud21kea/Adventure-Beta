@@ -5,15 +5,17 @@ import java.util.ArrayList;
 public class Controller {
 
     private final UserInterface ui;
+    private final Inventory inventory;
     private final Map map;
     private final Player player;
 
     public Controller() {
         ui = new UserInterface(this);
-        map = new Map();
+        inventory = new Inventory();
+        map = new Map(inventory);
         map.buildMap();
         map.addStarterItems();
-        player = new Player(map.getInitialInventory(), map.getStarterRoom(), map.knife);
+        player = new Player(map.getInitialInventory(), map.getStarterRoom(), inventory.knife);
     }
 
     public void start() {
@@ -186,7 +188,7 @@ public class Controller {
                 boolean canEat = checkCanEatFoundItem(foundItem);
                 if (canEat) {
                     eatItem((Food) foundItem); // Cast to food
-                    if (foundItem == map.aPoisonApple) {
+                    if (foundItem == inventory.aPoisonApple) {
                         foundItemNames.add("A bad apple");
                         foundItemNames.remove(foundItem.getItemName());
                     }

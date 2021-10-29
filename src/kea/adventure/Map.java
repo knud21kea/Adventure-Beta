@@ -25,40 +25,12 @@ public class Map {
 
     private Room courtyard, chancellery, ballroom, banquet, catacombs, apartment, hall, casements, chapel;
     private final ArrayList<Room> rooms = new ArrayList<>();
+    private Inventory inventory;
     private final ArrayList<Item> startInventory = new ArrayList<>();
     private final Random rand = new Random();
 
-    // Create all instances of Item class
-    // Some names have duplicates to test the parser - key, gold, silver etc.
-
-    Item brassLamp = new Item("A brass lamp", 15);
-    Item diamondRing = new Item("A diamond ring", 5);
-    Item emptyBottle = new Item("An empty bottle", 5);
-    Item silverKey = new Item("A silver key", 1);
-    Item silverCoin = new Item("A silver coin", 1);
-    Item goldKey = new Item("A gold key", 1);
-    Item goldBar = new Item("A gold bar", 20);
-    Item holyWater = new Item("Some holy water", 10);
-    Item oldParchment = new Item("An old parchment", 2);
-    Item magneticCompass = new Item("A magnetic compass", 5);
-    Item boxOfMatches = new Item("A box of matches", 3);
-    Item paperClip = new Item("A paper clip", 0);
-
-    Food anApple = new Food("A green apple", 5, 10);
-    Food aPoisonApple = new Food("A red apple", 5, -10);
-    Food aPear = new Food("A ripe pear", 5, 5);
-
-    Weapon knife = new MeleeWeapon("A blunt knife", 5, 1, 1);
-    Weapon dagger = new MeleeWeapon("A sharp dagger", 5, 5, 1);
-    Weapon sword = new MeleeWeapon("A sword", 10, 15, 1);
-    Weapon axe = new MeleeWeapon("An axe", 15, 25, 1);
-    Weapon bow = new ShootingWeapon("A bow", 5, 10, 3);
-
-    Enemy orc = new Enemy("An ugly orc", 50, axe);
-    Enemy elf = new Enemy("A dark elf", 60, bow);
-    Enemy goblin = new Enemy("A small goblin", 40, dagger);
-
-    public Map() {
+    public Map(Inventory inventory) {
+        this.inventory = inventory;
     }
 
     public void buildMap() {
@@ -94,29 +66,29 @@ public class Map {
     public void addStarterItems() {
 
         // Place items in rooms
-        chancellery.addItemToRoom(brassLamp);
-        ballroom.addItemToRoom(diamondRing);
-        ballroom.addItemToRoom(emptyBottle);
-        banquet.addItemToRoom(aPoisonApple);
-        courtyard.addItemToRoom(anApple);
-        apartment.addItemToRoom(aPear);
-        banquet.addItemToRoom(silverCoin);
-        banquet.addItemToRoom(goldBar);
-        apartment.addItemToRoom(goldKey);
-        hall.addItemToRoom(oldParchment);
-        chapel.addItemToRoom(holyWater);
+        chancellery.addItemToRoom(inventory.brassLamp);
+        ballroom.addItemToRoom(inventory.diamondRing);
+        ballroom.addItemToRoom(inventory.emptyBottle);
+        banquet.addItemToRoom(inventory.aPoisonApple);
+        courtyard.addItemToRoom(inventory.anApple);
+        apartment.addItemToRoom(inventory.aPear);
+        banquet.addItemToRoom(inventory.silverCoin);
+        banquet.addItemToRoom(inventory.goldBar);
+        apartment.addItemToRoom(inventory.goldKey);
+        hall.addItemToRoom(inventory.oldParchment);
+        chapel.addItemToRoom(inventory.holyWater);
 
-        courtyard.addItemToRoom(sword);
-        chancellery.putEnemyInRoom(orc);
-        casements.putEnemyInRoom(elf);
-        chapel.putEnemyInRoom(goblin);
+        courtyard.addItemToRoom(inventory.sword);
+        chancellery.putEnemyInRoom(inventory.orc);
+        casements.putEnemyInRoom(inventory.elf);
+        chapel.putEnemyInRoom(inventory.goblin);
 
         // Items the player has to start with
 
-        startInventory.add(magneticCompass);
-        startInventory.add(boxOfMatches);
-        startInventory.add(paperClip);
-        startInventory.add(silverKey);
+        startInventory.add(inventory.magneticCompass);
+        startInventory.add(inventory.boxOfMatches);
+        startInventory.add(inventory.paperClip);
+        startInventory.add(inventory.silverKey);
     }
 
     // Default start is in room 1 (now an argument in Player class)
@@ -155,12 +127,12 @@ public class Map {
 
     public boolean checkForHolyWater() {
         ArrayList<Item> objects = getSpecialRoom().getRoomItems();
-        return (objects.contains(holyWater));
+        return (objects.contains(inventory.holyWater));
     }
 
     public boolean checkForGoldBar() {
         ArrayList<Item> objects = getSpecialRoom().getRoomItems();
-        return (objects.contains(goldBar));
+        return (objects.contains(inventory.goldBar));
     }
 }
 
