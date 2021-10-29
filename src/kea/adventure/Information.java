@@ -67,7 +67,49 @@ public class Information {
                 W - Go West
                 R - Rest
                 X - Exit
+                R - Show Readme
                 C - Cheat (how to win)""");
+        System.out.println(Colours.RESET);
+    }
+
+    public void showReadme() {
+        System.out.println(Colours.YELLOW + """
+                ####################################################################################################
+                                                   --  Adventure (version 2.0) --
+                DAT21 Java project (compulsory group exercise).
+                 Developers: Graham Heaven and Lasse Bøgeskov-Jensen, September 2021.
+                A simple text-based adventure game inspired by "Colossal Cave Adventure",
+                 by William Crowther and Don Woods, from 1976-1977.
+                 
+                Version 1.1:
+                A single player navigates through a small maze of rooms using a simple text parser interface.
+                In each room it is possible to get limited information about the room, and move to connected rooms.
+                There is an achievable goal using the available commands.
+                                
+                Change log for version 1.2:
+                Added items that can be carried from room to room, dropped or taken.
+                Added strength points that are lost by doing actions and gained by resting.
+                Added weights to items.
+                Added max carrying weight for player, meaning sometimes something must be dropped to take something else.
+                Added more commands: Inventory player, Inventory room, Take item, Drop item, Show cheat sheet.
+                Added mission that requires successful combination of available commands. Player can also die in 2 different ways.
+                Added music class
+                Added context colours for text
+                                
+                Change log for version 1.3:
+                Added food as extension to item, with both positive and negative food values
+                Added Weapon as an extension to item, with sub-classes meleeWeapon and shootingWeapon
+                Added Enemy as new class with ability to equip weapons and use them
+                Added combat system
+                Added commands: Eat, Attack
+                Added documentation
+                
+                Change log for version 2.0
+                Added Controller
+                Added User Interface
+                Added enums
+                Improved low coupling
+                ################################################################################################################""");
         System.out.println(Colours.RESET);
     }
 

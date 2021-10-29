@@ -16,6 +16,7 @@ public class UserInterface {
     }
 
     public void loopMenu() {
+        info.showReadme();
         info.setScene();
         menuOption = startYesNo();
 
