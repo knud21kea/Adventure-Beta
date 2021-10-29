@@ -67,13 +67,14 @@ public class Information {
                 W - Go West
                 R - Rest
                 X - Exit
-                R - Show Readme
+                M - Toggle music (not implemented)
+                B - Background info
                 C - Cheat (how to win)""");
         System.out.println(Colours.RESET);
     }
 
     public void showReadme() {
-        System.out.println(Colours.YELLOW + """
+        System.out.println(Colours.CYAN + """
                 ####################################################################################################
                                                    --  Adventure (version 2.0) --
                 DAT21 Java project (compulsory group exercise).
@@ -104,7 +105,7 @@ public class Information {
                 Added commands: Eat, Attack
                 Added documentation
                 
-                Change log for version 2.0
+                Change log for version 2.0:
                 Added Controller
                 Added User Interface
                 Added enums
