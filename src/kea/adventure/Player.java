@@ -4,27 +4,24 @@ package kea.adventure;
 
 import java.util.ArrayList;
 
-import static kea.adventure.Health.*;
-
 public class Player {
 
     private Room currentRoom;
-    private Room requestedRoom;
     private final ArrayList<Item> itemsPlayer; // Player inventory
 
     private int strengthPoints = 100;
     private Weapon equippedWeapon;
 
-    public Player(Map map, Room start, Weapon weapon) {
+    public Player(ArrayList<Item> inventory, Room start, Weapon weapon) {
         this.currentRoom = start; //map.getStarterRoom();
-        this.itemsPlayer = map.getInitialInventory();
+        this.itemsPlayer = inventory; //map.getInitialInventory()
         this.equippedWeapon = weapon;
     }
 
     // Player moves in the given direction or finds the way blocked
 
     public boolean changeRoom(Direction direction) {
-        requestedRoom = this.currentRoom.getRoom(direction);
+        Room requestedRoom = this.currentRoom.getRoom(direction);
         if (requestedRoom != null) {
             this.currentRoom = requestedRoom; // move to new room
             return true;
@@ -64,17 +61,17 @@ public class Player {
 
     public Health checkStrength() {
         if (strengthPoints < 1) {
-            return DEAD;
+            return Health.DEAD;
         } else if (strengthPoints < 20) {
-            return EXHAUSTED;
+            return Health.EXHAUSTED;
         } else if (strengthPoints < 40) {
-            return TIRED;
+            return Health.TIRED;
         } else if (strengthPoints < 70) {
-            return WEARY;
+            return Health.WEARY;
         } else if (strengthPoints < 100) {
-            return FRESH;
+            return Health.FRESH;
         } else {
-            return RESTED;
+            return Health.RESTED;
         }
     }
 

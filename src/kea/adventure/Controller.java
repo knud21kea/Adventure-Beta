@@ -13,7 +13,7 @@ public class Controller {
         map = new Map();
         map.buildMap();
         map.addStarterItems();
-        player = new Player(map, map.getStarterRoom(), map.knife);
+        player = new Player(map.getInitialInventory(), map.getStarterRoom(), map.knife);
     }
 
     public void start() {
